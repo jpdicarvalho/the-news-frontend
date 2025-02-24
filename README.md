@@ -1,6 +1,6 @@
-# 📢 The News API - Dashboard de Engajamento
+# 📢 The News - Plataforma Web Funcional
 
-Bem-vindo ao **The News API**, um sistema para monitoramento de engajamento em newsletters, incluindo streaks de usuários, estatísticas gerais e filtros dinâmicos no dashboard administrativo.
+Bem-vindo ao projeto de gameficação do **The News**, um sistema para monitoramento de engajamento em newsletters, incluindo streaks de usuários, estatísticas gerais e filtros dinâmicos no dashboard administrativo.
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -13,23 +13,21 @@ Bem-vindo ao **The News API**, um sistema para monitoramento de engajamento em n
 - **Testes**: Postman, Insomnia e logs no Cloudflare Wrangler
 
 ### **⚠️ Desafios Enfrentados**
-1. **Webhook da empresa não funcionando** → Criamos um simulador de webhook no Cloudflare Workers.
-2. **Banco D1 sem suporte a algumas funções SQL** → Adaptamos queries para compatibilidade.
-3. **CORS bloqueando requisições** → Implementamos middleware para permitir requests do frontend.
-4. **JWT Storage** → Implementamos persistência do token com validação na API.
+1. **Webhook da empresa não funcionando** → Criei um simulador de webhook no Cloudflare Workers.
+2. **Banco D1 sem suporte a algumas funções SQL** → Adaptei queries para compatibilidade.
+3. **CORS bloqueando requisições** → Implementei middleware para permitir requests do frontend.
+4. **JWT Storage** → Implementei persistência do token com validação na API.
 
-### **📂 Organização do Código**
-Adotamos **modularização**:
-- **`index.ts`** → Ponto de entrada, onde rotas são importadas.
-- **`routes/*.ts`** → Divisão entre `auth.routes.ts`, `user.routes.ts`, `admin.routes.ts`, etc.
+### **👤 Organização do Código**
+Adotei **modularização**:
+- **`index.ts`** → Arquivo principal, onde as rotas estão contidas.
 - **`middleware/*.ts`** → Middleware de autenticação JWT.
-- **`controllers/*.ts`** → Lógica separada das rotas para manter Clean Code.
 
 ---
 
 ## 📊 Estrutura dos Dados
 
-### **🗄️ Estrutura SQL**
+### **🐄 Estrutura SQL**
 
 ```sql
 CREATE TABLE users (
@@ -57,7 +55,7 @@ CREATE TABLE sessions (
 - **Login** → Recupera usuário e gera JWT.
 - **Dashboard** → Filtros dinâmicos via query params.
 
-### **📈 Escalabilidade**
+### **📊 Escalabilidade**
 O D1 é limitado em **escrita concorrente**, mas eficiente para leitura. Se precisar escalar:
 - Usar **Redis** para cache.
 - Migrar para **PostgreSQL** ou **PlanetScale (MySQL)**.
@@ -68,52 +66,52 @@ O D1 é limitado em **escrita concorrente**, mas eficiente para leitura. Se prec
 ## ✅ Testes Realizados
 
 ### **🔬 Tipos de Testes**
-- **API Testes**: Testamos todas as rotas via Postman.
-- **Webhook Teste**: Criamos um simulador enviando requisições a cada 5 minutos.
-- **Banco de Dados**: Inserimos dados de teste retroativos de 30 dias.
-- **Autenticação JWT**: Testamos expiração de token e middleware de segurança.
+- **API Testes**: Testei todas as rotas via Postman.
+- **Webhook Teste**: Criei um simulador enviando requisições a cada 5 minutos.
+- **Banco de Dados**: Inserções de dados de teste retroativos de 30 dias.
+- **Autenticação JWT**: Testei expiração de token e middleware de segurança.
 - **Dashboard**: Filtros aplicados corretamente e dados formatados para gráficos.
 
 ### **⏳ Tempo de Desenvolvimento**
-- **Backend**: 12 horas
-- **Webhook e Testes**: 6 horas
-- **Frontend (dashboard + integração)**: 8 horas
+- **Backend**: 2 dias
+- **Webhook e Testes**: 1 dia
+- **Frontend (dashboard + integração)**: 1 dia
 - **Refinamento e correções**: 4 horas
-- **Total**: **~30 horas**
+- **Total**: **~4 dias e 4 horas**
 
 ---
 
 ## 📌 Como Rodar o Projeto
 
 ### **🌐 Backend**
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-repo/the-news-api.git
-   ```
-2. Instale dependências:
-   ```bash
-   cd the-news-api && npm install
-   ```
-3. Configure o Cloudflare Wrangler:
-   ```bash
-   npx wrangler login
-   ```
-4. Rode localmente:
-   ```bash
-   npm run dev
-   ```
+🚀 O backend já está em produção na **Cloudflare Workers**, então **não é necessário rodá-lo localmente**.
+
+🔗 [Repositório Backend](https://github.com/jpdicarvalho/the-news-backend)
+
+🔗 [Repositório Webhook Simulator](https://github.com/jpdicarvalho/the-news-webhook-simulator)
+
 
 ### **🖥️ Frontend**
-1. Clone o repositório do frontend.
-2. Instale dependências e rode:
+1. Clone o repositório do frontend (React + Vite):
    ```bash
-   npm install && npm start
-   ```
-3. Acesse `http://localhost:3000` no navegador.
-
+   git clone https://github.com/seu-repo/the-news-frontend.git
+2. Acesse o diretório
+   ```bash
+   cd the-news-frontend
+3. Instale as dependências
+   ```bash
+   npm install
+4. Execulte o projeto
+   ```bash
+   npm run dev
 ---
-
-## 📬 Contato
+### **Para acessar como usuário convencional use:**
+     teste@teste.com
+ 
+### **Para acessar como usuário admin use:**
+    admin@admin.com	
+---
+        
+## Contato
 Caso tenha dúvidas ou sugestões:
-- 📧 Email: `seuemail@email.com`
-- 💼 LinkedIn: [linkedin.com/in/seuperfil](https://linkedin.com/in/seuperfil)
+- 💎 LinkedIn: [Meu LinkedIn](https://www.linkedin.com/in/jpdicarvalho/)
