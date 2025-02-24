@@ -1,50 +1,119 @@
-# React + TypeScript + Vite
+# 📢 The News API - Dashboard de Engajamento
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bem-vindo ao **The News API**, um sistema para monitoramento de engajamento em newsletters, incluindo streaks de usuários, estatísticas gerais e filtros dinâmicos no dashboard administrativo.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### **🛠️ Stacks**
+- **Backend**: [Hono.js](https://hono.dev/) (framework minimalista para Cloudflare Workers)
+- **Banco de Dados**: Cloudflare D1 (SQLite compatível com Workers)
+- **Autenticação**: JWT (JSON Web Token)
+- **Frontend**: React.js + Axios para requisições
+- **Deploy**: Cloudflare Workers
+- **Testes**: Postman, Insomnia e logs no Cloudflare Wrangler
 
-## Expanding the ESLint configuration
+### **⚠️ Desafios Enfrentados**
+1. **Webhook da empresa não funcionando** → Criamos um simulador de webhook no Cloudflare Workers.
+2. **Banco D1 sem suporte a algumas funções SQL** → Adaptamos queries para compatibilidade.
+3. **CORS bloqueando requisições** → Implementamos middleware para permitir requests do frontend.
+4. **JWT Storage** → Implementamos persistência do token com validação na API.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### **📂 Organização do Código**
+Adotamos **modularização**:
+- **`index.ts`** → Ponto de entrada, onde rotas são importadas.
+- **`routes/*.ts`** → Divisão entre `auth.routes.ts`, `user.routes.ts`, `admin.routes.ts`, etc.
+- **`middleware/*.ts`** → Middleware de autenticação JWT.
+- **`controllers/*.ts`** → Lógica separada das rotas para manter Clean Code.
 
-- Configure the top-level `parserOptions` property like this:
+---
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📊 Estrutura dos Dados
+
+### **🗄️ Estrutura SQL**
+
+```sql
+CREATE TABLE users (
+    id TEXT PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    streak INTEGER DEFAULT 0,
+    last_opened TEXT
+);
+
+CREATE TABLE newsletters (
+    id TEXT PRIMARY KEY,
+    user_id TEXT REFERENCES users(id),
+    opened_at TEXT
+);
+
+CREATE TABLE sessions (
+    user_id TEXT PRIMARY KEY REFERENCES users(id),
+    token TEXT NOT NULL,
+    expires_at TEXT NOT NULL
+);
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### **📥 Inserções e Consultas**
+- **Webhook** → Insere leituras automaticamente ao ser acionado.
+- **Login** → Recupera usuário e gera JWT.
+- **Dashboard** → Filtros dinâmicos via query params.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### **📈 Escalabilidade**
+O D1 é limitado em **escrita concorrente**, mas eficiente para leitura. Se precisar escalar:
+- Usar **Redis** para cache.
+- Migrar para **PostgreSQL** ou **PlanetScale (MySQL)**.
+- Implementar **fila de processamento** para registros massivos.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+---
+
+## ✅ Testes Realizados
+
+### **🔬 Tipos de Testes**
+- **API Testes**: Testamos todas as rotas via Postman.
+- **Webhook Teste**: Criamos um simulador enviando requisições a cada 5 minutos.
+- **Banco de Dados**: Inserimos dados de teste retroativos de 30 dias.
+- **Autenticação JWT**: Testamos expiração de token e middleware de segurança.
+- **Dashboard**: Filtros aplicados corretamente e dados formatados para gráficos.
+
+### **⏳ Tempo de Desenvolvimento**
+- **Backend**: 12 horas
+- **Webhook e Testes**: 6 horas
+- **Frontend (dashboard + integração)**: 8 horas
+- **Refinamento e correções**: 4 horas
+- **Total**: **~30 horas**
+
+---
+
+## 📌 Como Rodar o Projeto
+
+### **🌐 Backend**
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-repo/the-news-api.git
+   ```
+2. Instale dependências:
+   ```bash
+   cd the-news-api && npm install
+   ```
+3. Configure o Cloudflare Wrangler:
+   ```bash
+   npx wrangler login
+   ```
+4. Rode localmente:
+   ```bash
+   npm run dev
+   ```
+
+### **🖥️ Frontend**
+1. Clone o repositório do frontend.
+2. Instale dependências e rode:
+   ```bash
+   npm install && npm start
+   ```
+3. Acesse `http://localhost:3000` no navegador.
+
+---
+
+## 📬 Contato
+Caso tenha dúvidas ou sugestões:
+- 📧 Email: `seuemail@email.com`
+- 💼 LinkedIn: [linkedin.com/in/seuperfil](https://linkedin.com/in/seuperfil)
